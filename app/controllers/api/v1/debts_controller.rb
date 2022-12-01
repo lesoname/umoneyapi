@@ -1,15 +1,15 @@
 class Api::V1::DebtsController < ApplicationController
   def index
-    @debts = Debt.all
-    render json: @debts, except: [:user_id, :created_at, :updated_at],
+    @index_debts = Debt.all
+    render json: @index_debts, except: [:user_id, :created_at, :updated_at],
     include: [user:{except:[:created_at, :updated_at]}]
   end
 
 
   def show
-    @debt = Debt.find_by(id: params[:id])
-    if debt
-      render json: @debt, status: 200
+    @show_debt_by_id = Debt.find_by(id: params[:id])
+    if @show_debt_by_id
+      render json: @show_debt_by_id, status: 200
     else
       render json: {
         error: "Debt not found"
@@ -19,16 +19,16 @@ class Api::V1::DebtsController < ApplicationController
 
 
   def create
-    @debt = Debt.new(
+    @debt_creation = Debt.new(
       description: debt_params[:description],
       category: debt_params[:category],
       price: debt_params[:price],
       date: debt_params[:date],
       paid: debt_params[:paid],
-      user_id: deb_params[:user_id]
+      user_id: debt_params[:user_id]
     )
-    if @debt.save
-      render json: @debt, status: 200
+    if @debt_creation.save
+      render json: @debt_creation, status: 200
     else
       render json: {
         error: "Error Creating..."
@@ -38,10 +38,10 @@ class Api::V1::DebtsController < ApplicationController
 
 
   def update
-    debt = Debt.find_by(id: params[:id])
-    if debt
-      debt.update(description: params[:description], category: params[:category], price: params[:price], date: params[:date], paid: params[:paid])
-      render json: debt, status: 200
+    @debt_update = Debt.find_by(id: params[:id])
+    if @debt_update
+      @debt_update.update(description: params[:description], category: params[:category], price: params[:price], date: params[:date], paid: params[:paid])
+      render json: @debt_update, status: 200
     else
       render json: {
         error: "Debt not found"
@@ -51,9 +51,9 @@ class Api::V1::DebtsController < ApplicationController
 
 
   def destroy
-    debt = Debt.find_by(id: params[:id])
-    if debt
-      debt.destroy
+    @debt_destroy = Debt.find_by(id: params[:id])
+    if @debt_destroy
+      @debt_destroy.destroy
       render json: "Debt has been deleted successfully"
     else
       render json: {
