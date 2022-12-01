@@ -12,7 +12,7 @@ class Api::V1::DebtsController < ApplicationController
       render json: @show_debt_by_id, status: 200
     else
       render json: {
-        error: "Debt not found"
+        error: "Debt not found", status: 404
       }
     end
   end
@@ -31,7 +31,7 @@ class Api::V1::DebtsController < ApplicationController
       render json: @debt_creation, status: 200
     else
       render json: {
-        error: "Error Creating..."
+        error: "Error Creating...", status: 400
       }
     end
   end
@@ -44,7 +44,7 @@ class Api::V1::DebtsController < ApplicationController
       render json: @debt_update, status: 200
     else
       render json: {
-        error: "Debt not found"
+        error: "Debt not found", status: 404
       }
     end
   end
@@ -54,10 +54,10 @@ class Api::V1::DebtsController < ApplicationController
     @debt_destroy = Debt.find_by(id: params[:id])
     if @debt_destroy
       @debt_destroy.destroy
-      render json: "Debt has been deleted successfully"
+      render json: "Debt has been deleted successfully", status: 200
     else
       render json: {
-        error: "Debt has not been deleted"
+        error: "Debt has not been deleted", status: 400
       }
     end
   end
