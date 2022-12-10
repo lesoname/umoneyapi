@@ -2,7 +2,7 @@ class Api::V1::DebtsController < ApplicationController
   def index
     @index_debts = Debt.all
     render json: @index_debts, except: [:user_id, :created_at, :updated_at],
-    include: [user:{except:[:created_at, :updated_at]}]
+                              include: [user:{except:[:created_at, :updated_at]}]
   end
 
 
@@ -40,7 +40,12 @@ class Api::V1::DebtsController < ApplicationController
   def update
     @debt_update = Debt.find_by(id: params[:id])
     if @debt_update
-      @debt_update.update(description: params[:description], category: params[:category], price: params[:price], date: params[:date], paid: params[:paid])
+      @debt_update.update(description: params[:description],
+                          category: params[:category],
+                          price: params[:price],
+                          date: params[:date],
+                          paid: params[:paid]
+                        )
       render json: @debt_update, status: 200
     else
       render json: {
